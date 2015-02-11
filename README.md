@@ -44,7 +44,7 @@ SchemaPlus::Views is tested on:
 
 ### Creating views
 
-  In a migration, a view can be created using literal SQL: 
+In a migration, a view can be created using literal SQL:
 
 ```ruby
 create_view :uncommented_posts,        "SELECT * FROM posts LEFT OUTER JOIN comments ON comments.post_id = posts.id WHERE comments.id IS NULL"
@@ -56,7 +56,9 @@ or using an object that responds to `:to_sql`, such as a relation:
 create_view :posts_commented_by_staff,  Post.joins(comment: user).where(users: {role: 'staff'}).uniq
 ```
 
-(It's of course a questionable idea for your migrations to depend on your model definitions.  But you *can* if you want.)
+(It's of course a questionable idea for your migration files to depend on your model definitions.  But you *can* if you want.)
+
+SchemaPlus::Views also arranges to include the `create_view` statements (with literal SQL) in the schema dump.
 
 ### Dropping views
 
@@ -69,7 +71,7 @@ drop_view :uncommented_posts, :if_exists => true
 
 ### Using views
 
-ActiveRecord models can be use views the same as ordinary tables.  That is, for the above views you can define
+ActiveRecord models can be base based on views the same as ordinary tables.  That is, for the above views you can define
 
 ```ruby
 class UncommentedPost < ActiveRecord::Base
@@ -85,15 +87,15 @@ end
 You can look up the defined views analogously to looking up tables:
 
 ```ruby
-connection.tables # => array of table names (defined by ActiveRecord)
-connection.views  # => array of names of views (defined by SchemaPlus::Views)
+connection.tables # => array of table names [method provided by ActiveRecord]
+connection.views  # => array of view names [method provided by SchemaPlus::Views]
 ```
 
 Notes:
 
 1. For Mysql and SQLite3, ActiveRecord's `connection.tables` method would return views as well as tables; SchemaPlus::Views normalizes them to return only tables.
 
-2. For PostgreSQL, `connection.views` does *not* return views prefixed with `pg_` as those are presumed to be internal.
+2. For PostgreSQL, `connection.views` suppresses views prefixed with `pg_` as those are presumed to be internal.
 
 ### Querying view definitions
 
