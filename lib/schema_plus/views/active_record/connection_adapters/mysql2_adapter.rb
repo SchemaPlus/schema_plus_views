@@ -1,4 +1,4 @@
-module SchemaPlusViews
+module SchemaPlus::Views
   module ActiveRecord
     module ConnectionAdapters
       module Mysql2Adapter

@@ -1,4 +1,4 @@
-module SchemaPlusViews
+module SchemaPlus::Views
   module Middleware
 
     module Dumper
