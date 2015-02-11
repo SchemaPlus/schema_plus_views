@@ -5,7 +5,7 @@
 
 # SchemaPlus::Views
 
-SchemaPlus::Views adds support for ceating and dropping views in ActiveRecord migrations, as well as querying views.
+SchemaPlus::Views adds support for creating and dropping views in ActiveRecord migrations, as well as querying views.
 
 SchemaPlus::Views is part of the [SchemaPlus](https://github.com/SchemaPlus/) family of Ruby on Rails extension gems.
 
