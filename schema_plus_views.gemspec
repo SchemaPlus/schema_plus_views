@@ -8,8 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = SchemaPlus::Views::VERSION
   gem.authors       = ["ronen barzel"]
   gem.email         = ["ronen@barzel.org"]
-  gem.summary       = %q{TODO: Write a short summary. Required.}
-  gem.description   = %q{TODO: Write a longer description. Optional.}
+  gem.summary       = %q{Adds support for views to ActiveRecord}
   gem.homepage      = "https://github.com/SchemaPlus/schema_plus_views"
   gem.license       = "MIT"
 
