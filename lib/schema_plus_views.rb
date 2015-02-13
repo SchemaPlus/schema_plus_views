@@ -1,1 +1,1 @@
-require_relative 'schema_plus/views.rb'
+require_relative 'schema_plus/views'

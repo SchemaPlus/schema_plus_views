@@ -47,7 +47,7 @@ SchemaPlus::Views is tested on:
 In a migration, a view can be created using literal SQL:
 
 ```ruby
-create_view :uncommented_posts,        "SELECT * FROM posts LEFT OUTER JOIN comments ON comments.post_id = posts.id WHERE comments.id IS NULL"
+create_view :uncommented_posts, "SELECT * FROM posts LEFT OUTER JOIN comments ON comments.post_id = posts.id WHERE comments.id IS NULL"
 ```
 
 or using an object that responds to `:to_sql`, such as a relation:
@@ -76,7 +76,7 @@ ActiveRecord models can be base based on views the same as ordinary tables.  Tha
 ```ruby
 class UncommentedPost < ActiveRecord::Base
 end
-    
+
 class PostCommentedByStaff < ActiveRecord::Base
   table_name = "posts_commented_by_staff"
 end
@@ -114,9 +114,7 @@ This returns just the body of the definition, i.e. the part after the `CREATE VI
 
 ## Development & Testing
 
-Are you interested in contributing to SchemaPlus::Views?  Thanks!  Please follow
-the standard protocol: fork, feature branch, develop, push, and issue pull
-request.
+Are you interested in contributing to SchemaPlus::Views?  Thanks!  Please follow the standard protocol: fork, feature branch, develop, push, and issue pull request.
 
 Some things to know about to help you develop and test:
 
@@ -147,7 +145,7 @@ Some things to know about to help you develop and test:
   ActiveRecord's behavior.  If that API is missing something you need for
   your contribution, please head over to
   [schema_plus_core](https://github/SchemaPlus/schema_plus_core) and open
-  an issue or pull request.  
+  an issue or pull request.
 
 <!-- SCHEMA_DEV: TEMPLATE USES SCHEMA_PLUS_CORE - end -->
 
