@@ -144,7 +144,7 @@ Some things to know about to help you develop and test:
   provides middleware callback stacks to make it easy to extend
   ActiveRecord's behavior.  If that API is missing something you need for
   your contribution, please head over to
-  [schema_plus_core](https://github/SchemaPlus/schema_plus_core) and open
+  [schema_plus_core](https://github.com/SchemaPlus/schema_plus_core) and open
   an issue or pull request.
 
 <!-- SCHEMA_DEV: TEMPLATE USES SCHEMA_PLUS_CORE - end -->
@@ -155,6 +155,5 @@ Some things to know about to help you develop and test:
   [schema_monkey](https://github.com/SchemaPlus/schema_monkey) client,
   using [schema_monkey](https://github.com/SchemaPlus/schema_monkey)'s
   convention-based protocols for extending ActiveRecord and using middleware stacks.
-  For more information see [schema_monkey](https://github.com/SchemaPlus/schema_monkey)'s README.
 
 <!-- SCHEMA_DEV: TEMPLATE USES SCHEMA_MONKEY - end -->
