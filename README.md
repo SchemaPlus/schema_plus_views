@@ -63,7 +63,7 @@ drop_view :uncommented_posts, :if_exists => true
 
 ### Using views
 
-ActiveRecord models can be base based on views the same as ordinary tables.  That is, for the above views you can define
+ActiveRecord models can be based on views the same as ordinary tables.  That is, for the above views you can define
 
 ```ruby
 class UncommentedPost < ActiveRecord::Base
