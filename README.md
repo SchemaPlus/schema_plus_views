@@ -50,6 +50,13 @@ create_view :posts_commented_by_staff,  Post.joins(comment: user).where(users: {
 
 (It's of course a questionable idea for your migration files to depend on your model definitions.  But you *can* if you want.)
 
+Additional options can be provided:
+
+* `:force => true` if there's an existing view with the given name, deletes it first.  Note that this could fail if another view depends on it.
+
+* `:allow_replace => true` will use the command "CREATE OR REPLACE" when creating the view, for seamlessly redefining the view even if other views depend on it.  It's only supported by MySQL and PostgreSQL, and each has some limitations on when a view can be replaced; see their docs for details.
+
+
 SchemaPlus::Views also arranges to include the `create_view` statements (with literal SQL) in the schema dump.
 
 ### Dropping views
@@ -88,8 +95,6 @@ Notes:
 1. For Mysql and SQLite3, ActiveRecord's `connection.tables` method would return views as well as tables; SchemaPlus::Views normalizes them to return only tables.
 
 2. For PostgreSQL, `connection.views` suppresses views prefixed with `pg_` as those are presumed to be internal.
-
-3. For MySQL and PostgreSQL, passing the option `:allow_replace => true` will use the command "CREATE OR REPLACE" when creating the view, for seamlessly redefining the view. Dropping the view and then re-creating will fail if another view depends on it; using the `allow_replace` option will not.
 
 ### Querying view definitions
 
