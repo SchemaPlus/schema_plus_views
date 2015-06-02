@@ -89,6 +89,8 @@ Notes:
 
 2. For PostgreSQL, `connection.views` suppresses views prefixed with `pg_` as those are presumed to be internal.
 
+3. For MySQL and PostgreSQL, passing the option `:allow_replace => true` will use the command "CREATE OR REPLACE" when creating the view, for seamlessly redefining the view. Dropping the view and then re-creating will fail if another view depends on it; using the `allow_replace` option will not.
+
 ### Querying view definitions
 
 You can look up the definition of a view using
