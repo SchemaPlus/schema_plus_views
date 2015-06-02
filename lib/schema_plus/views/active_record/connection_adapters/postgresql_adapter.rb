@@ -3,21 +3,6 @@ module SchemaPlus::Views
     module ConnectionAdapters
       module PostgresqlAdapter
 
-        # Create a view given the SQL definition.  Specify :allow_replace => true to allow replacement of the view.
-        # Specify :force => true to first drop the view if it already exists.
-        def create_view(view_name, definition, options={})
-          definition = definition.to_sql if definition.respond_to? :to_sql
-          command = "CREATE"
-          
-          if options[:allow_replace]
-            command = "CREATE OR REPLACE"
-          elsif options[:force]
-            drop_view(view_name, if_exists: true)
-          end
-
-          execute "#{command} VIEW #{quote_table_name(view_name)} AS #{definition}"
-        end
-
         def views(name = nil) #:nodoc:
           sql = <<-SQL
             SELECT viewname
