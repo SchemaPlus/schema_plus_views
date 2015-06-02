@@ -9,7 +9,14 @@ module SchemaPlus::Views
           if options[:force]
             drop_view(view_name, if_exists: true)
           end
-          execute "CREATE VIEW #{quote_table_name(view_name)} AS #{definition}"
+
+          command = if options[:allow_replace]
+            "CREATE OR REPLACE"
+          else
+            "CREATE"
+          end
+
+          execute "#{command} VIEW #{quote_table_name(view_name)} AS #{definition}"
         end
 
         # Drop the named view.  Specify :if_exists => true

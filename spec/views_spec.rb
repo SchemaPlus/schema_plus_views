@@ -103,6 +103,13 @@ describe "Views" do
       migration.create_view('dupe_me', 'SELECT * FROM items WHERE (a=2)', :force => true)
       expect(connection.view_definition('dupe_me')).to match(%r{WHERE .*a.*=.*2}i)
     end
+ 
+    context "Postgres and MySQL only", :sqlite3 => :skip do
+      it "should override existing definition if :allow_replace is true" do
+        migration.create_view('dupe_me', 'SELECT * FROM items WHERE (a=2)', :allow_replace => true)
+        expect(connection.view_definition('dupe_me')).to match(%r{WHERE .*a.*=.*2}i)
+      end
+    end
   end
 
   context "dropping" do
