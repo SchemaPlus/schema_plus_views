@@ -67,6 +67,30 @@ describe "Migration" do
     end
   end
 
+  describe "rollback" do
+    it "properly rolls back a create_view" do
+      m = Class.new ::ActiveRecord::Migration do
+        define_method(:change) {
+          create_view :copy, "SELECT * FROM items"
+        }
+      end
+      m.migrate(:up)
+      expect(connection.views).to include("copy")
+      m.migrate(:down)
+      expect(connection.views).not_to include("copy")
+    end
+
+    it "raises error for drop_view" do
+      m = Class.new ::ActiveRecord::Migration do
+        define_method(:change) {
+          drop_view :a_ones
+        }
+      end
+      expect { m.migrate(:down) }.to raise_error(::ActiveRecord::IrreversibleMigration)
+    end
+  end
+
+
   protected
 
   def define_schema_and_data
