@@ -16,8 +16,9 @@ describe "Dumper" do
   end
 
   it "should include view definitions" do
-    expect(dump).to match(%r{create_view "a_ones", " ?SELECT .*b.*,.*s.* FROM .*items.* WHERE .*a.* = 1.*, :force => true}mi)
-    expect(dump).to match(%r{create_view "ab_ones", " ?SELECT .*s.* FROM .*a_ones.* WHERE .*b.* = 1.*, :force => true}mi)
+    puts dump
+    expect(dump).to match(view_re("a_ones", /SELECT .*b.*,.*s.* FROM .*items.* WHERE \(?.*a.* = 1\)?/mi))
+    expect(dump).to match(view_re("ab_ones", /SELECT .*s.* FROM .*a_ones.* WHERE \(?.*b.* = 1\)?/mi))
   end
 
   it "should include views in dependency order" do
@@ -26,7 +27,7 @@ describe "Dumper" do
 
   it "should not include views listed in ignore_tables" do
     dump(ignore_tables: /b_/) do |dump|
-      expect(dump).to match(%r{create_view "a_ones", " ?SELECT .*b.*,.*s.* FROM .*items.* WHERE .*a.* = 1.*, :force => true}mi)
+      expect(dump).to match(view_re("a_ones", /SELECT .*b.*,.*s.* FROM .*items.* WHERE \(?.*a.* = 1\)?/mi))
       expect(dump).not_to match(%r{"ab_ones"})
     end
   end
@@ -44,6 +45,11 @@ describe "Dumper" do
   end
 
   protected
+
+  def view_re(name, re)
+    heredelim = "END_VIEW_#{name.upcase}"
+    %r{create_view "#{name}", <<-#{heredelim}, :force => true\n\s*#{re}\s*\n *#{heredelim}$}mi
+  end
 
   def define_schema_and_data
     connection.views.each do |view| connection.drop_view view end

@@ -18,7 +18,10 @@ module SchemaPlus::Views
         # quacks like a SchemaMonkey Dump::Table
         class View < KeyStruct[:name, :definition]
           def assemble(stream)
-            stream.puts("  create_view #{name.inspect}, #{definition.inspect}, :force => true\n")
+            heredelim = "END_VIEW_#{name.upcase}"
+            stream.puts "  create_view #{name.to_json}, <<-#{heredelim}, :force => true\n"
+            definition.split("\n").each { |line| stream.puts line.to_json[1...-1] + "\n" }
+            stream.puts "  #{heredelim}\n\n"
           end
         end
       end
