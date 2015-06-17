@@ -109,6 +109,7 @@ This returns just the body of the definition, i.e. the part after the `CREATE VI
 
 ## History
 
+* 0.2.2 - Prettier dumps: use heredoc for definition string
 * 0.2.1 - Fix db:rollback
 * 0.2.0 - Added :allow_replace option (thanks to [@hcarver](https://github.com/hcarver))
 * 0.1.0 - Initial release, extracted from schema_plus 1.x
