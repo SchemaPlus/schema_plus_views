@@ -109,6 +109,7 @@ This returns just the body of the definition, i.e. the part after the `CREATE VI
 
 ## History
 
+* 0.2.3 - Remove unnecessary escaping in dump; use single-quote heredoc
 * 0.2.2 - Prettier dumps: use heredoc for definition string
 * 0.2.1 - Fix db:rollback
 * 0.2.0 - Added :allow_replace option (thanks to [@hcarver](https://github.com/hcarver))
