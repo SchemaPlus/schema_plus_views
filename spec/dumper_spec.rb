@@ -48,7 +48,7 @@ describe "Dumper" do
 
   def view_re(name, re)
     heredelim = "END_VIEW_#{name.upcase}"
-    %r{create_view "#{name}", <<-#{heredelim}, :force => true\n\s*#{re}\s*\n *#{heredelim}$}mi
+    %r{create_view "#{name}", <<-'#{heredelim}', :force => true\n\s*#{re}\s*\n *#{heredelim}$}mi
   end
 
   def define_schema_and_data

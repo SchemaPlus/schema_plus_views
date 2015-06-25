@@ -19,9 +19,12 @@ module SchemaPlus::Views
         class View < KeyStruct[:name, :definition]
           def assemble(stream)
             heredelim = "END_VIEW_#{name.upcase}"
-            stream.puts "  create_view #{name.to_json}, <<-#{heredelim}, :force => true\n"
-            definition.split("\n").each { |line| stream.puts line.to_json[1...-1] + "\n" }
-            stream.puts "  #{heredelim}\n\n"
+            stream.puts <<-ENDVIEW
+  create_view "#{name}", <<-'#{heredelim}', :force => true
+#{definition}
+  #{heredelim}
+
+            ENDVIEW
           end
         end
       end
