@@ -50,6 +50,28 @@ module SchemaPlus::Views
         end
       end
     end
+
+    #
+    # Define new middleware stacks patterned on SchemaPlus::Core's naming
+    # for tables
+
+    module Schema
+      module Views
+        ENV = [:connection, :query_name, :views]
+      end
+      module ViewDefinition
+        ENV = [:connection, :view_name, :query_name, :definition]
+      end
+    end
+
+    module Migration
+      module CreateView
+        ENV = [:connection, :view_name, :definition, :options]
+      end
+      module DropView
+        ENV = [:connection, :view_name, :options]
+      end
+    end
   end
 
 end

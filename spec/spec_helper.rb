@@ -21,6 +21,9 @@ RSpec.configure do |config|
       ActiveRecord::Base.connection.tables.each do |table|
         ActiveRecord::Migration.drop_table table, force: :cascade
       end
+      ActiveRecord::Base.connection.views.each do |view|
+        ActiveRecord::Migration.drop_view view, force: :cascade
+      end
       example.run
     end
   end
