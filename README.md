@@ -56,7 +56,6 @@ Additional options can be provided:
 
 * `:allow_replace => true` will use the command "CREATE OR REPLACE" when creating the view, for seamlessly redefining the view even if other views depend on it.  It's only supported by MySQL and PostgreSQL, and each has some limitations on when a view can be replaced; see their docs for details.
 
-
 SchemaPlus::Views also arranges to include the `create_view` statements (with literal SQL) in the schema dump.
 
 ### Dropping views
@@ -105,6 +104,64 @@ connection.view_definition(view_name) # => returns SQL string
 ```
 
 This returns just the body of the definition, i.e. the part after the `CREATE VIEW 'name' AS` command.
+
+## Customization API: Middleware Stacks
+
+All the methods defined by SchemaPlus::Views provide middleware stacks, in case you need to do any custom filtering, rewriting, triggering, or whatever.  For info on how to use middleware stacks, see the READMEs of [schema_monkey](https://SchemaPlus/schema_monkey) and [schema_plus_core](https://SchemaPlus/schema_plus_core).
+
+
+### `Schema::Views` stack
+
+Wraps the `connection.views` method.  Env contains:
+
+Env Field    | Description | Initialized
+--- | --- | ---
+`:views`     | The result of the lookup | `[]`
+`:connection` | The current ActiveRecord connection | *context*
+`:query_name` | Optional label for ActiveRecord logging | *arg*
+
+The base implementation appends its results to `env.views`
+
+### `Schema::ViewDefinition` stack
+
+Wraps the `connection.view_definition` method.  Env contains:
+
+Env Field    | Description | Initialized
+--- | --- | ---
+`:connection` | The current ActiveRecord connection | *context*
+`:view_name`  | The view to look up | *arg*
+`:query_name` | Optional label for ActiveRecord logging | *arg*
+`:definition` | The view definition SQL | `nil`
+
+The base implementation looks up the definition of the view named
+`env.view_name` and assigns the result to `env.definition`
+
+### `Migration::CreateView` stack
+
+Wraps the `migration.create_view` method.  Env contains:
+
+Env Field    | Description | Initialized
+--- | --- | ---
+`:connection` | The current ActiveRecord connection | *context*
+`:view_name`  | The view name | *arg*
+`:definition` | The view definition SQL | *arg*
+`:options` | Create view options | *arg*
+
+The base implementation creates the view named `env.view_name` using the
+definition in `env.definition` with options in `env.options`
+
+### `Migration::DropView` stack
+
+Wraps the `migration.drop_view` method.  Env contains:
+
+Env Field    | Description | Initialized
+--- | --- | ---
+`:connection` | The current ActiveRecord connection | *context*
+`:view_name`  | The view name | *arg*
+`:options` | Drop view options | *arg*
+
+The base implementation drops the view named `env.view_name` using the
+options in `env.options`
 
 
 ## History
