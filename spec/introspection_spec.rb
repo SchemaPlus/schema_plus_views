@@ -17,8 +17,8 @@ describe "Introspection" do
 
   it "should list all views" do
     expect(connection.views.sort).to eq(%W[a_ones ab_ones])
-    expect(connection.view_definition('a_ones')).to match(%r{^ ?SELECT .*b.*,.*s.* FROM .*items.* WHERE .*a.* = 1}mi)
-    expect(connection.view_definition('ab_ones')).to match(%r{^ ?SELECT .*s.* FROM .*a_ones.* WHERE .*b.* = 1}mi)
+    expect(connection.view_definition('a_ones')).to match(%r{^SELECT .*b.*,.*s.* FROM .*items.* WHERE .*a.* = 1}mi)
+    expect(connection.view_definition('ab_ones')).to match(%r{^SELECT .*s.* FROM .*a_ones.* WHERE .*b.* = 1}mi)
   end
 
   it "should ignore views named pg_*", postgresql: :only do
@@ -36,8 +36,8 @@ describe "Introspection" do
   end
 
   it "should introspect definition" do
-    expect(connection.view_definition('a_ones')).to match(%r{^ ?SELECT .*b.*,.*s.* FROM .*items.* WHERE .*a.* = 1}mi)
-    expect(connection.view_definition('ab_ones')).to match(%r{^ ?SELECT .*s.* FROM .*a_ones.* WHERE .*b.* = 1}mi)
+    expect(connection.view_definition('a_ones')).to match(%r{^SELECT .*b.*,.*s.* FROM .*items.* WHERE .*a.* = 1}mi)
+    expect(connection.view_definition('ab_ones')).to match(%r{^SELECT .*s.* FROM .*a_ones.* WHERE .*b.* = 1}mi)
   end
 
   context "in mysql", :mysql => :only do

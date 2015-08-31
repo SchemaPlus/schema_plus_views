@@ -22,7 +22,7 @@ module SchemaPlus::Views
            AND relname = '#{view_name}'
           SQL
           row = result.first
-          row.first.chomp(';') unless row.nil?
+          row.first.chomp(';').strip unless row.nil?
         end
 
       end
