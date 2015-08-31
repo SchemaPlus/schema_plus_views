@@ -16,7 +16,6 @@ describe "Dumper" do
   end
 
   it "should include view definitions" do
-    puts dump
     expect(dump).to match(view_re("a_ones", /SELECT .*b.*,.*s.* FROM .*items.* WHERE \(?.*a.* = 1\)?/mi))
     expect(dump).to match(view_re("ab_ones", /SELECT .*s.* FROM .*a_ones.* WHERE \(?.*b.* = 1\)?/mi))
   end
