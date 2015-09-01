@@ -166,6 +166,9 @@ options in `env.options`
 
 ## History
 
+* 0.3.0
+  - Added middleware stacks
+  - Bug fix: view_definition: strip white space from result (postgresql)
 * 0.2.3 - Remove unnecessary escaping in dump; use single-quote heredoc
 * 0.2.2 - Prettier dumps: use heredoc for definition string
 * 0.2.1 - Fix db:rollback
