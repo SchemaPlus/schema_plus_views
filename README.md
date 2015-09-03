@@ -107,7 +107,7 @@ This returns just the body of the definition, i.e. the part after the `CREATE VI
 
 ## Customization API: Middleware Stacks
 
-All the methods defined by SchemaPlus::Views provide middleware stacks, in case you need to do any custom filtering, rewriting, triggering, or whatever.  For info on how to use middleware stacks, see the READMEs of [schema_monkey](https://SchemaPlus/schema_monkey) and [schema_plus_core](https://SchemaPlus/schema_plus_core).
+All the methods defined by SchemaPlus::Views provide middleware stacks, in case you need to do any custom filtering, rewriting, triggering, or whatever.  For info on how to use middleware stacks, see the READMEs of [schema_monkey](https://github.com/SchemaPlus/schema_monkey) and [schema_plus_core](https://github.com/SchemaPlus/schema_plus_core).
 
 
 ### `Schema::Views` stack
