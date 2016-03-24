@@ -166,6 +166,7 @@ options in `env.options`
 
 ## History
 
+* 0.3.1 - Upgrade schema_plus_core and schema_dev dependencies
 * 0.3.0
   - Added middleware stacks
   - Bug fix: view_definition: strip white space from result (postgresql)
