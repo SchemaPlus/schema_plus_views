@@ -6,10 +6,10 @@ describe "with multiple schemas" do
   end
 
   before(:each) do
-    newdb = case connection.adapter_name
-            when /^mysql/i then      "CREATE SCHEMA IF NOT EXISTS schema_plus_views_test2"
-            when /^postgresql/i then "CREATE SCHEMA schema_plus_views_test2"
-            when /^sqlite/i then     "ATTACH ':memory:' AS schema_plus_views_test2"
+    newdb = case 
+            when SchemaDev::Rspec::Helpers.mysql? then      "CREATE SCHEMA IF NOT EXISTS schema_plus_views_test2"
+            when SchemaDev::Rspec::Helpers.postgresql? then "CREATE SCHEMA schema_plus_views_test2"
+            when SchemaDev::Rspec::Helpers.sqlite3? then    "ATTACH ':memory:' AS schema_plus_views_test2"
             end
     begin
       ActiveRecord::Base.connection.execute newdb
@@ -28,10 +28,10 @@ describe "with multiple schemas" do
     end
 
     connection.execute 'DROP TABLE IF EXISTS schema_plus_views_test2.users'
-    connection.execute 'CREATE TABLE schema_plus_views_test2.users (id ' + case connection.adapter_name
-          when /^mysql/i then      "integer primary key auto_increment"
-          when /^postgresql/i then "serial primary key"
-          when /^sqlite/i then     "integer primary key autoincrement"
+    connection.execute 'CREATE TABLE schema_plus_views_test2.users (id ' + case
+          when SchemaDev::Rspec::Helpers.mysql? then      "integer primary key auto_increment"
+          when SchemaDev::Rspec::Helpers.postgresql? then "serial primary key"
+          when SchemaDev::Rspec::Helpers.sqlite3? then    "integer primary key autoincrement"
           end + ", login varchar(255))"
   end
 
