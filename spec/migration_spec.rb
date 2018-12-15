@@ -69,7 +69,7 @@ describe "Migration" do
 
   describe "rollback" do
     it "properly rolls back a create_view" do
-      m = Class.new ::ActiveRecord::Migration do
+      m = Class.new ::ActiveRecord::Migration.latest_version do
         define_method(:change) {
           create_view :copy, "SELECT * FROM items"
         }
@@ -81,7 +81,7 @@ describe "Migration" do
     end
 
     it "raises error for drop_view" do
-      m = Class.new ::ActiveRecord::Migration do
+      m = Class.new ::ActiveRecord::Migration.latest_version do
         define_method(:change) {
           drop_view :a_ones
         }
@@ -95,7 +95,7 @@ describe "Migration" do
 
   def define_schema_and_data
     connection.views.each do |view| connection.drop_view view end
-    connection.tables.each do |table| connection.drop_table table, cascade: true end
+    connection.tables_only.each do |table| connection.drop_table table, cascade: true end
 
     schema.define do
 
