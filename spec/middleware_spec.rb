@@ -55,11 +55,9 @@ context SchemaPlus::Views::Middleware do
 
   context TestMiddleware::Middleware::Schema::Views do
     it "calls middleware" do
-      expect(spy_on {connection.views 'qn'}).to eq({
-        #connection: connection,
-        views: ['a_view'],
-        query_name: 'qn'
-      })
+      expect(spy_on {connection.views}).to include(
+        views: ['a_view']
+      )
     end
   end
 

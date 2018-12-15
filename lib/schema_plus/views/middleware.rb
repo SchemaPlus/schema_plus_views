@@ -30,35 +30,19 @@ module SchemaPlus::Views
       end
     end
 
-    module Schema
-      module Tables
-
-        module Mysql
-          def after(env)
-            Tables.filter_out_views(env)
-          end
-        end
-
-        module Sqlite3
-          def after(env)
-            Tables.filter_out_views(env)
-          end
-        end
-
-        def self.filter_out_views(env)
-          env.tables -= env.connection.views(env.query_name)
-        end
-      end
-    end
-
-    #
     # Define new middleware stacks patterned on SchemaPlus::Core's naming
     # for tables
 
     module Schema
-      module Views
-        ENV = [:connection, :query_name, :views]
+      module Postgresql
+        module Views
+          # Override middleware for PostgreSQL
+          def before(env)
+            env.where_constraints << env.connection._filter_user_data_sources_sql
+          end
+        end
       end
+
       module ViewDefinition
         ENV = [:connection, :view_name, :query_name, :definition]
       end

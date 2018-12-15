@@ -52,7 +52,7 @@ describe "Dumper" do
 
   def define_schema_and_data
     connection.views.each do |view| connection.drop_view view end
-    connection.tables.each do |table| connection.drop_table table, cascade: true end
+    connection.tables_only.each do |table| connection.drop_table table, cascade: true end
 
     schema.define do
 

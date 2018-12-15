@@ -31,8 +31,8 @@ describe "Introspection" do
   end
 
   it "should not be listed as a table" do
-    expect(connection.tables).not_to include('a_ones')
-    expect(connection.tables).not_to include('ab_ones')
+    expect(connection.tables_only).not_to include('a_ones')
+    expect(connection.tables_only).not_to include('ab_ones')
   end
 
   it "should introspect definition" do
@@ -71,7 +71,7 @@ describe "Introspection" do
 
   def define_schema_and_data
     connection.views.each do |view| connection.drop_view view end
-    connection.tables.each do |table| connection.drop_table table, cascade: true end
+    connection.tables_only.each do |table| connection.drop_table table, cascade: true end
 
     schema.define do
 
