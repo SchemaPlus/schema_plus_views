@@ -7,6 +7,7 @@ module SchemaPlus::Views
             results = select_all("SELECT view_definition, check_option FROM information_schema.views WHERE table_schema = SCHEMA() AND table_name = #{quote(view_name)}", name)
             if  results.any?
               row = results.first
+              row.transform_keys!(&:downcase)
               sql = row["view_definition"]
               sql.gsub!(%r{#{quote_table_name(current_database)}[.]}, '')
               case row["check_option"]
