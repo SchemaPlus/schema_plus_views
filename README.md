@@ -113,14 +113,16 @@ You can look up the defined views analogously to looking up tables:
 
 ```ruby
 connection.tables # => array of table names [method provided by ActiveRecord]
-connection.views  # => array of view names [method provided by SchemaPlus::Views]
+connection.views  # => array of view names [method overridden by SchemaPlus::Views for postgres]
 ```
 
 Notes:
 
-1. For Mysql and SQLite3, ActiveRecord's `connection.tables` method would return views as well as tables; SchemaPlus::Views normalizes them to return only tables.
-
-2. For PostgreSQL, `connection.views` suppresses views prefixed with `pg_` as those are presumed to be internal.
+1. For PostgreSQL, `connection.views` suppresses views prefixed with `pg_` as those are presumed to be internal. Also it suppresses the "postgis" specifically named tables
+   - geography_columns
+   - geometry_columns
+   - raster_columns
+   - raster_overviews 
 
 ### Querying view definitions
 
@@ -141,19 +143,6 @@ connection.view_type(view_name) # => returns a Symbol, either :view or :material
 ## Customization API: Middleware Stacks
 
 All the methods defined by SchemaPlus::Views provide middleware stacks, in case you need to do any custom filtering, rewriting, triggering, or whatever.  For info on how to use middleware stacks, see the READMEs of [schema_monkey](https://github.com/SchemaPlus/schema_monkey) and [schema_plus_core](https://github.com/SchemaPlus/schema_plus_core).
-
-
-### `Schema::Views` stack
-
-Wraps the `connection.views` method.  Env contains:
-
-Env Field    | Description | Initialized
---- | --- | ---
-`:views`     | The result of the lookup | `[]`
-`:connection` | The current ActiveRecord connection | *context*
-`:query_name` | Optional label for ActiveRecord logging | *arg*
-
-The base implementation appends its results to `env.views`
 
 ### `Schema::ViewDefinition` stack
 
@@ -200,6 +189,7 @@ options in `env.options`
 
 ## History
 
+* 0.4.0 - Added support for Rails 5.2 and materialized views in PostgreSQL
 * 0.3.1 - Upgrade schema_plus_core and schema_dev dependencies
 * 0.3.0
   - Added middleware stacks
