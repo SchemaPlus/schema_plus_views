@@ -43,9 +43,6 @@ module SchemaPlus::Views
         # define them all. Defining them here only for reference.
         #
 
-        # (abstract) Returns the names of all views, as an array of strings
-        def views(name = nil) raise "Internal Error: Connection adapter didn't override abstract function"; [] end
-
         # (abstract) Returns the SQL definition of a given view.  This is
         # the literal SQL would come after 'CREATVE VIEW viewname AS ' in
         # the SQL statement to create a view.

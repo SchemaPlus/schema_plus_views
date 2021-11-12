@@ -1,7 +1,8 @@
 ruby:
-    - 2.1.5
+    - 2.5.9
+    - 2.7.3
 activerecord:
-    - 4.2
+    - 5.2
 db:
     - mysql2
     - sqlite3

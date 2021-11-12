@@ -30,35 +30,11 @@ module SchemaPlus::Views
       end
     end
 
-    module Schema
-      module Tables
-
-        module Mysql
-          def after(env)
-            Tables.filter_out_views(env)
-          end
-        end
-
-        module Sqlite3
-          def after(env)
-            Tables.filter_out_views(env)
-          end
-        end
-
-        def self.filter_out_views(env)
-          env.tables -= env.connection.views(env.query_name)
-        end
-      end
-    end
-
     #
     # Define new middleware stacks patterned on SchemaPlus::Core's naming
     # for tables
 
     module Schema
-      module Views
-        ENV = [:connection, :query_name, :views]
-      end
       module ViewDefinition
         ENV = [:connection, :view_name, :query_name, :definition]
       end

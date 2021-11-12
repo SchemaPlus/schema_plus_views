@@ -4,12 +4,6 @@ module TestMiddleware
   module Middleware
 
     module Schema
-      module Views
-        SPY = []
-        def after(env)
-          SPY << env.to_hash.except(:connection)
-        end
-      end
       module ViewDefinition
         SPY = []
         def after(env)
@@ -50,16 +44,6 @@ context SchemaPlus::Views::Middleware do
         t.integer :a
       end
       create_view 'a_view', "select a from items"
-    end
-  end
-
-  context TestMiddleware::Middleware::Schema::Views do
-    it "calls middleware" do
-      expect(spy_on {connection.views 'qn'}).to eq({
-        #connection: connection,
-        views: ['a_view'],
-        query_name: 'qn'
-      })
     end
   end
 

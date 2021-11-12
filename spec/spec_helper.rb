@@ -12,7 +12,7 @@ require 'schema_dev/rspec'
 
 SchemaDev::Rspec.setup
 
-Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
+Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   config.warnings = true
@@ -26,6 +26,18 @@ RSpec.configure do |config|
       end
       example.run
     end
+  end
+end
+
+def apply_migration(config = {}, &block)
+  ActiveRecord::Schema.define do
+    instance_eval &block
+  end
+end
+
+def build_migration(version: 5.0, &block)
+  Class.new(::ActiveRecord::Migration[version]) do
+    instance_eval &block
   end
 end
 

@@ -30,6 +30,29 @@ describe "Introspection" do
     end
   end
 
+  context "when using PostGIS", postgresql: :only do
+    before do
+      apply_migration do
+        SchemaPlus::Views::ActiveRecord::ConnectionAdapters::PostgresqlAdapter::POSTGIS_VIEWS.each do |view|
+          create_view view, 'select 1'
+        end
+      end
+    end
+
+    after do
+      apply_migration do
+        SchemaPlus::Views::ActiveRecord::ConnectionAdapters::PostgresqlAdapter::POSTGIS_VIEWS.each do |view|
+          drop_view view
+        end
+      end
+    end
+
+    it "should hide views in postgis views" do
+      expect(connection.views.sort).to eq(%W[a_ones ab_ones])
+    end
+  end
+
+
   it "should not be listed as a table" do
     expect(connection.tables).not_to include('a_ones')
     expect(connection.tables).not_to include('ab_ones')
