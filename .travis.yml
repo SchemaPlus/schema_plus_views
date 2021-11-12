@@ -21,6 +21,33 @@ jobs:
   - gemfile: gemfiles/activerecord-5.2/Gemfile.postgresql
     rvm: 2.5.9
     addons:
+      postgresql: '10'
+      apt:
+        packages:
+        - postgresql-10
+        - postgresql-client-10
+    env: POSTGRESQL_DB_USER=postgres
+  - gemfile: gemfiles/activerecord-5.2/Gemfile.postgresql
+    rvm: 2.5.9
+    addons:
+      postgresql: '11'
+      apt:
+        packages:
+        - postgresql-11
+        - postgresql-client-11
+    env: POSTGRESQL_DB_USER=travis PGPORT=5433
+  - gemfile: gemfiles/activerecord-5.2/Gemfile.postgresql
+    rvm: 2.5.9
+    addons:
+      postgresql: '12'
+      apt:
+        packages:
+        - postgresql-12
+        - postgresql-client-12
+    env: POSTGRESQL_DB_USER=travis PGPORT=5433
+  - gemfile: gemfiles/activerecord-5.2/Gemfile.postgresql
+    rvm: 2.5.9
+    addons:
       postgresql: '9.6'
     env: POSTGRESQL_DB_USER=postgres
   - gemfile: gemfiles/activerecord-5.2/Gemfile.mysql2
@@ -28,6 +55,33 @@ jobs:
     services:
     - mysql
     env: MYSQL_DB_USER=travis
+  - gemfile: gemfiles/activerecord-5.2/Gemfile.postgresql
+    rvm: 2.7.3
+    addons:
+      postgresql: '11'
+      apt:
+        packages:
+        - postgresql-11
+        - postgresql-client-11
+    env: POSTGRESQL_DB_USER=travis PGPORT=5433
+  - gemfile: gemfiles/activerecord-5.2/Gemfile.postgresql
+    rvm: 2.7.3
+    addons:
+      postgresql: '12'
+      apt:
+        packages:
+        - postgresql-12
+        - postgresql-client-12
+    env: POSTGRESQL_DB_USER=travis PGPORT=5433
+  - gemfile: gemfiles/activerecord-5.2/Gemfile.postgresql
+    rvm: 2.7.3
+    addons:
+      postgresql: '10'
+      apt:
+        packages:
+        - postgresql-10
+        - postgresql-client-10
+    env: POSTGRESQL_DB_USER=postgres
   - gemfile: gemfiles/activerecord-5.2/Gemfile.postgresql
     rvm: 2.7.3
     addons:

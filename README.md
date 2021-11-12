@@ -57,7 +57,29 @@ Additional options can be provided:
 
 * `:allow_replace => true` will use the command "CREATE OR REPLACE" when creating the view, for seamlessly redefining the view even if other views depend on it.  It's only supported by MySQL and PostgreSQL, and each has some limitations on when a view can be replaced; see their docs for details.
 
+* `:materialized => true` will create a materialized view instead of a standard view.  This view caches its contents on disk and must be refreshed to update its contents.  It is only supported on PostgreSQL. Further, allow_replace is not supported on materialized views.
+
 SchemaPlus::Views also arranges to include the `create_view` statements (with literal SQL) in the schema dump.
+
+#### Materialized views
+
+Materialized views persist their data when created and must be manually refreshed to see new data.
+Further materialized views can have indexes defined on them.
+
+```ruby
+create_view :posts_commented_by_staff, <<~SQL, materialized: true
+SELECT * FROM posts LEFT OUTER JOIN comments ON comments.post_id = posts.id WHERE comments.id IS NULL
+SQL
+
+add_index :posts_commented_by_staff, :category
+add_index :posts_commented_by_staff, :token, unique: true
+```
+
+To refresh a materialized view run the refresh_view connection command.
+
+```ruby
+ActiveRecord::Base.connection.refresh_view('posts_commented_by_staff')
+```
 
 ### Dropping views
 
@@ -66,6 +88,10 @@ In a migration:
 ```ruby
 drop_view :posts_commented_by_staff
 drop_view :uncommented_posts, :if_exists => true
+
+# materialized views
+drop_view :posts_commented_by_staff, materialized: true
+drop_view :uncommented_posts, :if_exists => true, materialized: true
 ```
 
 ### Using views
@@ -106,6 +132,12 @@ connection.view_definition(view_name) # => returns SQL string
 
 This returns just the body of the definition, i.e. the part after the `CREATE VIEW 'name' AS` command.
 
+You can also lookup the type of view (regular or materialized) using
+
+```ruby
+connection.view_type(view_name) # => returns a Symbol, either :view or :materialized
+```
+
 ## Customization API: Middleware Stacks
 
 All the methods defined by SchemaPlus::Views provide middleware stacks, in case you need to do any custom filtering, rewriting, triggering, or whatever.  For info on how to use middleware stacks, see the READMEs of [schema_monkey](https://github.com/SchemaPlus/schema_monkey) and [schema_plus_core](https://github.com/SchemaPlus/schema_plus_core).
@@ -125,7 +157,7 @@ The base implementation appends its results to `env.views`
 
 ### `Schema::ViewDefinition` stack
 
-Wraps the `connection.view_definition` method.  Env contains:
+Wraps the `connection.view_full_definition` method.  Env contains:
 
 Env Field    | Description | Initialized
 --- | --- | ---
@@ -133,6 +165,7 @@ Env Field    | Description | Initialized
 `:view_name`  | The view to look up | *arg*
 `:query_name` | Optional label for ActiveRecord logging | *arg*
 `:definition` | The view definition SQL | `nil`
+`:view_type`  | The view type symbol. | :view`
 
 The base implementation looks up the definition of the view named
 `env.view_name` and assigns the result to `env.definition`

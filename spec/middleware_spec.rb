@@ -34,12 +34,11 @@ SchemaMonkey.register TestMiddleware
 
 context SchemaPlus::Views::Middleware do
 
-  let(:schema) { ActiveRecord::Schema }
   let(:migration) { ActiveRecord::Migration }
   let(:connection) { ActiveRecord::Base.connection }
 
   before(:each) do
-    schema.define do
+    apply_migration do
       create_table :items, force: true do |t|
         t.integer :a
       end

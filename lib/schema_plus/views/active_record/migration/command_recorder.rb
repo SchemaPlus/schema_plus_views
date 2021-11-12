@@ -11,7 +11,9 @@ module SchemaPlus::Views
         end
 
         def invert_create_view(args)
-          [ :drop_view, [args.first] ]
+          options = {}
+          options[:materialized] = args[2][:materialized] if args[2].has_key?(:materialized)
+          [ :drop_view, [args.first, options] ]
         end
 
       end

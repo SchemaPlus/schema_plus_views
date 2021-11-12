@@ -3,8 +3,8 @@ module SchemaPlus::Views
     module ConnectionAdapters
       module Mysql2Adapter
 
-        def view_definition(view_name, name = nil)
-          SchemaMonkey::Middleware::Schema::ViewDefinition.start(connection: self, view_name: view_name, query_name: name) { |env|
+        def view_full_definition(view_name, name = nil)
+          data = SchemaMonkey::Middleware::Schema::ViewDefinition.start(connection: self, view_name: view_name, query_name: name, view_type: :view) { |env|
             results = select_all("SELECT view_definition, check_option FROM information_schema.views WHERE table_schema = SCHEMA() AND table_name = #{quote(view_name)}", name)
             if  results.any?
               row = results.first
@@ -16,7 +16,9 @@ module SchemaPlus::Views
               end
               env.definition = sql
             end
-          }.definition
+          }
+
+          [data.definition, data.view_type]
         end
 
       end

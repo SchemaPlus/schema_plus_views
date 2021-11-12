@@ -5,8 +5,6 @@ end
 
 describe "Dumper" do
 
-  let(:schema) { ActiveRecord::Schema }
-
   let(:migration) { ActiveRecord::Migration }
 
   let(:connection) { ActiveRecord::Base.connection }
@@ -39,27 +37,77 @@ describe "Dumper" do
     # when in the (say) development database, but then uses it to
     # initialize the test database when testing.  this meant that the
     # test database had views into the development database.
-    db = connection.respond_to?(:current_database)? connection.current_database : SchemaDev::Rspec.db_configuration[:database]
+    db = connection.respond_to?(:current_database) ? connection.current_database : SchemaDev::Rspec.db_configuration[:database]
     expect(dump).not_to match(%r{#{connection.quote_table_name(db)}[.]})
+  end
+
+  context 'materialized views', postgresql: :only do
+    before do
+      apply_migration do
+        create_view :materialized, Item.select('b, s').where(:a => 1), materialized: true
+
+        add_index :items, :a, where: 'a = 1'
+
+        add_index :materialized, :s
+        add_index :materialized, :b, unique: true, name: 'index_materialized_unique'
+      end
+    end
+
+    it "include the view definitions" do
+      expect(dump).to match(view_re("materialized", /SELECT .*b.*,.*s.* FROM .*items.* WHERE \(?.*a.* = 1\)?/mi, ', materialized: true'))
+    end
+
+    it 'includes the index definitions' do
+      expect(dump).to match(/index_materialized_on_s/)
+      expect(dump).to match(/index_materialized_unique.+unique/)
+    end
+
+    context 'when indexes are function results', postgresql: :only do
+      before do
+        apply_migration do
+          add_index :materialized, 'length(s)', name: 'index_materialized_function'
+        end
+      end
+
+      it 'includes the index definition' do
+        expect(dump).to match(/length\(.+name.+index_materialized_function/)
+      end
+    end
+
+    context 'when index has a where clause', postgresql: :only do
+      before do
+        apply_migration do
+          add_index :materialized, :s, where: 'b = 1', name: 'index_materialized_conditional'
+        end
+      end
+
+      it 'includes the index definition' do
+        expect(dump).to match(/index_materialized_conditional.+where/)
+      end
+    end
   end
 
   protected
 
-  def view_re(name, re)
+  def view_re(name, re, extra_config = '')
     heredelim = "END_VIEW_#{name.upcase}"
-    %r{create_view "#{name}", <<-'#{heredelim}', :force => true\n\s*#{re}\s*\n *#{heredelim}$}mi
+    %r{create_view "#{name}", <<-'#{heredelim}', :force => true#{extra_config}\n\s*#{re}\s*\n *#{heredelim}$}mi
   end
 
   def define_schema_and_data
-    connection.views.each do |view| connection.drop_view view end
-    connection.tables.each do |table| connection.drop_table table, cascade: true end
+    connection.views.each do |view|
+      connection.drop_view view
+    end
+    connection.tables.each do |table|
+      connection.drop_table table, cascade: true
+    end
 
-    schema.define do
+    apply_migration do
 
       create_table :items, :force => true do |t|
         t.integer :a
         t.integer :b
-        t.string  :s
+        t.string :s
       end
 
       create_view :a_ones, Item.select('b, s').where(:a => 1)
@@ -71,7 +119,7 @@ describe "Dumper" do
     connection.execute "insert into items (a, b, s) values (2, 2, 'two_two')"
   end
 
-  def dump(opts={})
+  def dump(opts = {})
     StringIO.open { |stream|
       ActiveRecord::SchemaDumper.ignore_tables = Array.wrap(opts[:ignore_tables])
       ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, stream)
