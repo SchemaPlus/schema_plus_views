@@ -54,9 +54,9 @@ module SchemaPlus::Views
             extra_options = ", materialized: true" if view_type == :materialized
             heredelim     = "END_VIEW_#{name.upcase}"
             stream.puts <<~ENDVIEW
-              create_view "#{name}", <<-'#{heredelim}', :force => true#{extra_options}
-                #{definition}
-              #{heredelim}
+                create_view "#{name}", <<-'#{heredelim}', :force => true#{extra_options}
+              #{definition}
+                #{heredelim}
             ENDVIEW
 
             indexes.each do |index|
@@ -64,6 +64,7 @@ module SchemaPlus::Views
               index.assemble(stream)
               stream.puts ""
             end
+            stream.puts ""
           end
         end
       end
