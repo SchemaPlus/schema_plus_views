@@ -189,6 +189,7 @@ options in `env.options`
 
 ## History
 
+* 0.4.1 - Corrected spacing around dumped schema
 * 0.4.0 - Added support for Rails 5.2 and materialized views in PostgreSQL
 * 0.3.1 - Upgrade schema_plus_core and schema_dev dependencies
 * 0.3.0
