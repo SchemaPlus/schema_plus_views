@@ -191,17 +191,18 @@ options in `env.options`
 
 ## History
 
-* 0.4.1 - Corrected spacing around dumped schema
-* 0.4.0 - Added support for Rails 5.2 and materialized views in PostgreSQL
-* 0.3.1 - Upgrade schema_plus_core and schema_dev dependencies
-* 0.3.0
+* **1.0.0** - Add ruby 3 and AR 6.0, drop Ruy < 2.5
+* **0.4.1** - Corrected spacing around dumped schema
+* **0.4.0** - Added support for Rails 5.2 and materialized views in PostgreSQL
+* **0.3.1** - Upgrade schema_plus_core and schema_dev dependencies
+* **0.3.0**
   - Added middleware stacks
   - Bug fix: view_definition: strip white space from result (postgresql)
-* 0.2.3 - Remove unnecessary escaping in dump; use single-quote heredoc
-* 0.2.2 - Prettier dumps: use heredoc for definition string
-* 0.2.1 - Fix db:rollback
-* 0.2.0 - Added :allow_replace option (thanks to [@hcarver](https://github.com/hcarver))
-* 0.1.0 - Initial release, extracted from schema_plus 1.x
+* **0.2.3** - Remove unnecessary escaping in dump; use single-quote heredoc
+* **0.2.2** - Prettier dumps: use heredoc for definition string
+* **0.2.1** - Fix db:rollback
+* **0.2.0** - Added :allow_replace option (thanks to [@hcarver](https://github.com/hcarver))
+* **0.1.0** - Initial release, extracted from schema_plus 1.x
 
 ## Development & Testing
 
