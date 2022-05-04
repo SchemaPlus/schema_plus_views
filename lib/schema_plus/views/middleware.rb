@@ -21,7 +21,7 @@ module SchemaPlus::Views
               end
             end
 
-            view = View.new(
+            view = ::SchemaPlus::Views::SchemaDump::View.new(
               name:       view_name,
               definition: definition,
               view_type:  view_type,
@@ -46,26 +46,6 @@ module SchemaPlus::Views
           options[:comment] = index.comment if index.comment
 
           options
-        end
-
-        # quacks like a SchemaMonkey Dump::Table
-        class View < KeyStruct[:name, :definition, :view_type, :indexes]
-          def assemble(stream)
-            extra_options = ", materialized: true" if view_type == :materialized
-            heredelim     = "END_VIEW_#{name.upcase}"
-            stream.puts <<~ENDVIEW
-                create_view "#{name}", <<-'#{heredelim}', :force => true#{extra_options}
-              #{definition}
-                #{heredelim}
-            ENDVIEW
-
-            indexes.each do |index|
-              stream.write "add_index \"#{name}\", "
-              index.assemble(stream)
-              stream.puts ""
-            end
-            stream.puts ""
-          end
         end
       end
     end

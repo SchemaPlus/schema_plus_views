@@ -9,6 +9,7 @@ require_relative 'views/version'
 require_relative 'views/active_record/connection_adapters/abstract_adapter'
 require_relative 'views/active_record/migration/command_recorder'
 require_relative 'views/middleware'
+require_relative 'views/schema_dump'
 
 module SchemaPlus::Views
   module ActiveRecord
