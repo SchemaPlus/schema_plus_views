@@ -199,6 +199,7 @@ options in `env.options`
 
 ## History
 
+* **1.0.1** - Add AR 6.1, 7.0 and Ruby 3.1 support
 * **1.0.0** - Add ruby 3 and AR 6.0, drop Ruy < 2.5
 * **0.4.1** - Corrected spacing around dumped schema
 * **0.4.0** - Added support for Rails 5.2 and materialized views in PostgreSQL
